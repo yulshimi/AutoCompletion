@@ -34,6 +34,19 @@ int main(int argc, char** argv)
   words.push_back("cse");
   words.push_back("crucio");
   words.push_back("autocomplete");
+  words.push_back("auto");
+  words.push_back("autocom");
+  words.push_back("harrrry");
+  words.push_back("himan");
+  words.push_back("thailand");
+  words.push_back("agogobar");
+  words.push_back("baccara");
+  words.push_back("harr yyyyyy");
+  words.push_back("harr yy  yyyy");
+  words.push_back("h arryyy  yyy");
+  words.push_back("harry yyyyy");
+  words.push_back("h ar ry yyy yy");
+  words.push_back("");
   
   
   cout << "Inserting into Dictionaries..." << endl;

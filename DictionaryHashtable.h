@@ -5,7 +5,7 @@
 
 #ifndef DICTIONARY_HASHTABLE_H
 #define DICTIONARY_HASHTABLE_H
-
+#include <unordered_set>
 #include <string>
 
 /**
@@ -32,6 +32,7 @@ public:
   ~DictionaryHashtable();
 
 private:
+  std::unordered_set<std::string> myTable;
   // Add your own data members and methods here
 };
 

@@ -5,10 +5,17 @@
 
 #ifndef DICTIONARY_TRIE_H
 #define DICTIONARY_TRIE_H
-
+#define ARRAY_SIZE 27
 #include <vector>
 #include <string>
-
+class Node
+{
+public:
+  Node();
+  Node* nodePtrArray[ARRAY_SIZE];
+  bool isItWord;
+  unsigned int frequency;
+};
 /**
  *  The class for a dictionary ADT, implemented as a trie
  *  You may implement this class as either a mulit-way trie
@@ -41,13 +48,14 @@ public:
    * is a word (and is among the num_completions most frequent completions
    * of the prefix)
    */
-  std::vector<std::string>
-  predictCompletions(std::string prefix, unsigned int num_completions);
+  std::vector<std::string> predictCompletions(std::string prefix, unsigned int num_completions);
 
   /* Destructor */
   ~DictionaryTrie();
 
 private:
+  Node* root;
+  void deleteAll(Node* deletePtr);
   // Add your own data members and methods here
 };
 
