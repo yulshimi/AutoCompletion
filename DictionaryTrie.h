@@ -6,8 +6,37 @@
 #ifndef DICTIONARY_TRIE_H
 #define DICTIONARY_TRIE_H
 #define ARRAY_SIZE 27
+#define ASCII 97
 #include <vector>
 #include <string>
+class treeNode
+{
+public:
+  treeNode();
+  treeNode(std::string myString, unsigned int myFreq);
+  std::string treeWord;
+  unsigned int treeFreq;
+  treeNode* leftChild;
+  treeNode* rightChild;
+  treeNode* parent;
+};
+class BST
+{
+public:
+  BST();
+  ~BST();
+  void setSize(int newSize);
+  unsigned int getSize() const;
+  bool isEmpty() const;
+  treeNode* getRoot() const;
+  bool insert(std::string myWord, unsigned int myFreq);
+  void deleteAll(treeNode* deletePtr);
+  std::vector<std::string> theHighestFreq(std::vector<std::string>& myVector, unsigned int numOfCompletion); 
+private:
+  treeNode* root;
+  unsigned int size;
+};
+
 class Node
 {
 public:
@@ -49,14 +78,17 @@ public:
    * of the prefix)
    */
   std::vector<std::string> predictCompletions(std::string prefix, unsigned int num_completions);
-
   /* Destructor */
   ~DictionaryTrie();
 
 private:
   Node* root;
   void deleteAll(Node* deletePtr);
+  void predictHelper(BST& myBST, Node* currentPtr, std::string word);
+  void neoPredictHelper(BST& myBST, Node* currentPtr, std::string word, char avoidChar);
+  Node* getNodePtr(std::string prefix);
   // Add your own data members and methods here
 };
+std::vector<std::string> operator+(std::vector<std::string>& theFirst, std::vector<std::string>& theSecond);
 
 #endif // DICTIONARY_TRIE_H
