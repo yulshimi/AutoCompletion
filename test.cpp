@@ -34,20 +34,20 @@ int main(int argc, char** argv)
   DictionaryTrie dt;
   int t_bst, t_ht, tt;
 
-  words.push_back("harry");
-  words.push_back("sriram");
-  words.push_back("cse");
+  words.push_back("  harry  ");
+  words.push_back("   sriram");
+  words.push_back("cse     ");
   words.push_back("crucio");
-  words.push_back("autocomplete");
-  words.push_back("auto");
-  words.push_back("autocom");
+  words.push_back(" autocomplete ");
+  words.push_back("  auto   ");
+  words.push_back(" autocom ");
   words.push_back("harrrry");
   words.push_back("himan");
   words.push_back("thailand");
   words.push_back("agogobar");
   words.push_back("baccara");
-  words.push_back("harr yyyyyy");
-  words.push_back("harr yy  yyyy");
+  words.push_back("harr yyyyyy     ");
+  words.push_back("harr yy  yyyy  ");
   words.push_back("h arryyy  yyy");
   words.push_back("harry yyyyy");
   words.push_back("h ar ry yyy yy");
@@ -115,7 +115,6 @@ int main(int argc, char** argv)
 
   cout << endl;
 
-// This is my own test. Remove it later.  
 /*You are supposed to add more test cases in this file */
   DictionaryTrie myTrie;
   myTrie.insert("AB GFG", 100 );  
@@ -154,11 +153,10 @@ int main(int argc, char** argv)
   ifstream in_stream;
   in_stream.open("shuffled_freq_dict.txt");
   DictionaryTrie* yourTrie = new DictionaryTrie();
-  myUtil.load_dict(*yourTrie, in_stream, 5000);
+  myUtil.load_dict(*yourTrie, in_stream, 10000);
+  cout << "Load Complete!" << endl;
   vector<string> goodVector;
-  goodVector = yourTrie->predictCompletions("a", 100);
-  goodVector.clear();
-  goodVector = yourTrie->predictCompletions("k", 444);
+  goodVector = yourTrie->predictCompletions("    a  ", 999);
   for(unsigned int i=0; i < goodVector.size(); ++i)
   {
     cout << goodVector[i] << endl;

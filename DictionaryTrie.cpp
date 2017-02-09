@@ -31,6 +31,14 @@ bool DictionaryTrie::insert(std::string word, unsigned int freq)
 {
   if(word.length() != 0)
   {
+    if(word[0] == ' ' || word[word.length()-1] == ' ')
+    {
+      word = ignore_space(word);
+    }
+    if(word.length() == 0) //empty string is not allowed
+    {
+      return false;
+    }
     for(unsigned int i=0; i < word.length(); ++i)
     {
       int ascii_val = (int)word[i];
@@ -92,7 +100,10 @@ bool DictionaryTrie::find(std::string word) const
 {
   Node* searchPtr = root;
   int index = 0;
-
+  if(word[0] == ' ' || word[word.length()-1] == ' ')
+  {
+    word = ignore_space(word);
+  }
   for(unsigned int i=0; i < word.length(); ++i)
   {
     if(word[i] == ' ')
@@ -136,7 +147,7 @@ void DictionaryTrie::deleteAll(Node* deletePtr)
 
 //This function is to return Node* which points to Node after prefix
 //If prefix is invalid, it returns nullptr
-Node* DictionaryTrie::getNodePtr(std::string prefix)
+Node* DictionaryTrie::getNodePtr(std::string prefix) const
 {
   Node* nodePtr = root;
   if(prefix.length() == 0)
@@ -152,7 +163,7 @@ Node* DictionaryTrie::getNodePtr(std::string prefix)
     }
     else
     {
-      index = ARRAY_SIZE;
+      index = ARRAY_SIZE - 1;
     }
     if(nodePtr->nodePtrArray[index] != nullptr)
     {
@@ -164,6 +175,51 @@ Node* DictionaryTrie::getNodePtr(std::string prefix)
     }
   }
   return nodePtr;
+}
+//This function is to cut off all space characters at the beginning and at the end
+std::string DictionaryTrie::ignore_space(std::string prefix) const
+{
+  int cut_point_front = 0;
+  int cut_point_back = 0;
+  string new_prefix = "";
+  if(prefix[0] == ' ')
+  {
+    for(unsigned int i=0; i < prefix.length(); ++i)
+    {
+      if(prefix[i] != ' ')
+      {
+        cut_point_front = i;
+        break;
+      }
+    }
+    if(cut_point_front == 0)
+    {
+      return new_prefix;
+    }
+  }
+  if(prefix[prefix.length()-1] == ' ')
+  {
+    for(int i=prefix.length()-1; i >= 0; --i)
+    {
+      if(prefix[i] != ' ')
+      {
+        cut_point_back = i;
+        break;
+      }
+    }
+  }
+  if(cut_point_back == 0)
+  {
+    if(prefix[prefix.length()-1] != ' ')
+    {
+      cut_point_back = prefix.length()-1;
+    }
+  }
+  for(int i = cut_point_front; i <= cut_point_back; ++i)
+  {
+    new_prefix = new_prefix + prefix[i];
+  }
+  return new_prefix; 
 }
 
 /* Return up to num_completions of the most frequent completions
@@ -180,7 +236,14 @@ std::vector<std::string> DictionaryTrie::predictCompletions(std::string prefix, 
 {
   Node* nodePtr;
   std::vector<std::string> words;
-  
+  if(num_completions == 0)
+  {
+    return words;
+  }
+  if(prefix[0] == ' ' || prefix[prefix.length()-1] == ' ')
+  {
+    prefix = ignore_space(prefix);
+  } 
   if(prefix.length() == 0)
   {
     std::cout << "Invalid Input. Please retry with correct input \n";
@@ -229,7 +292,7 @@ std::vector<std::string> DictionaryTrie::predictCompletions(std::string prefix, 
       for(unsigned int i=0; i < prevPrefix.length() - 1; ++i)
       {
         currPrefix = currPrefix + prevPrefix[i];
-      } 
+      }
       nodePtr = getNodePtr(currPrefix);
       if(nodePtr == nullptr)
       {
@@ -263,7 +326,7 @@ std::vector<std::string> DictionaryTrie::predictCompletions(std::string prefix, 
 /**********************************************************************
 This function is to build a BST to be prepared for sorting
 ***********************************************************************/
-void DictionaryTrie::predictHelper(BST& myBST, Node* currentPtr, std::string word)
+void DictionaryTrie::predictHelper(BST& myBST, Node* currentPtr, std::string word) const
 {
   if(currentPtr->isItWord == true)
   {
@@ -289,7 +352,7 @@ void DictionaryTrie::predictHelper(BST& myBST, Node* currentPtr, std::string wor
 }
 //This function is the same as predictHelper
 //It skips the index of avoidChar
-void DictionaryTrie::neoPredictHelper(BST& myBST, Node* currentPtr, std::string word, char avoidChar)
+void DictionaryTrie::neoPredictHelper(BST& myBST, Node* currentPtr, std::string word, char avoidChar) const
 {
   if(currentPtr->isItWord == true)
   {

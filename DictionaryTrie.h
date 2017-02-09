@@ -89,9 +89,10 @@ public:
 private:
   Node* root;
   void deleteAll(Node* deletePtr);
-  void predictHelper(BST& myBST, Node* currentPtr, std::string word);
-  void neoPredictHelper(BST& myBST, Node* currentPtr, std::string word, char avoidChar);
-  Node* getNodePtr(std::string prefix);
+  void predictHelper(BST& myBST, Node* currentPtr, std::string word) const;
+  void neoPredictHelper(BST& myBST, Node* currentPtr, std::string word, char avoidChar) const;
+  Node* getNodePtr(std::string prefix) const;
+  std::string ignore_space(std::string) const;
   // Add your own data members and methods here
 };
 std::vector<std::string> operator+(std::vector<std::string>& theFirst, std::vector<std::string>& theSecond);
