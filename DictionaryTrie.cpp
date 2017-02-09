@@ -1,6 +1,13 @@
+//Name: Phillip Jo, San Kang
+//Date: 02/08/2017/Wed
+//Overview: This program is the implementation of "DictionaryTrie.h"
+//Assignment#: PA2
+
+#include <cctype>
 #include "util.h"
 #include "DictionaryTrie.h"
-
+#include <iostream>
+using namespace std;
 Node::Node()
 {
   for(int i=0; i < ARRAY_SIZE; ++i)
@@ -24,6 +31,21 @@ bool DictionaryTrie::insert(std::string word, unsigned int freq)
 {
   if(word.length() != 0)
   {
+    for(unsigned int i=0; i < word.length(); ++i)
+    {
+      int ascii_val = (int)word[i];
+      if((ascii_val < 97 || ascii_val > 122) && ascii_val != 32)
+      {
+        if(ascii_val >= 65 && ascii_val <= 90)
+        {
+          word[i] = tolower(word[i]);
+        }
+        else
+        {
+          return false;
+        }
+      }
+    }
     Node* searchPtr = root;
     int index = 0;
     for(unsigned int i=0; i < word.length(); ++i)
@@ -112,10 +134,16 @@ void DictionaryTrie::deleteAll(Node* deletePtr)
   delete deletePtr;
 }
 
+//This function is to return Node* which points to Node after prefix
+//If prefix is invalid, it returns nullptr
 Node* DictionaryTrie::getNodePtr(std::string prefix)
 {
   Node* nodePtr = root;
-  for(int i=0; i < prefix.length(); ++i)
+  if(prefix.length() == 0)
+  {
+    return nullptr;
+  }
+  for(unsigned int i=0; i < prefix.length(); ++i)
   {
     int index = 0;
     if(prefix[i] != ' ')
@@ -137,6 +165,7 @@ Node* DictionaryTrie::getNodePtr(std::string prefix)
   }
   return nodePtr;
 }
+
 /* Return up to num_completions of the most frequent completions
  * of the prefix, such that the completions are words in the dictionary.
  * These completions should be listed from most frequent to least.
@@ -154,11 +183,28 @@ std::vector<std::string> DictionaryTrie::predictCompletions(std::string prefix, 
   
   if(prefix.length() == 0)
   {
+    std::cout << "Invalid Input. Please retry with correct input \n";
     return words;  //return a null vector
+  }
+  for(unsigned int i=0; i < prefix.length(); ++i)
+  {
+    int ascii_val = (int)prefix[i];
+    if((ascii_val < 97 || ascii_val > 122) && ascii_val != 32)
+    {
+      if(ascii_val <= 90 && ascii_val >= 65)
+      {
+        prefix[i] = tolower(prefix[i]);
+      }
+      else
+      {
+        std::cout << "Invalid Input. Please retry with correct input \n";
+      }
+    }
   }
   nodePtr = getNodePtr(prefix);
   if(nodePtr == nullptr) // prefix is invalid
   {
+    std::cout << "Invalid Input. Please retry with correct input \n";
     return words;
   }
   
@@ -179,13 +225,18 @@ std::vector<std::string> DictionaryTrie::predictCompletions(std::string prefix, 
     {
       tempBST.deleteAll(tempBST.getRoot());
       tempBST.setSize(0);
-      for(int i=0; i < prevPrefix.length() - 1; ++i)
+      tempBST.setTreeNode(nullptr);
+      for(unsigned int i=0; i < prevPrefix.length() - 1; ++i)
       {
         currPrefix = currPrefix + prevPrefix[i];
       } 
       nodePtr = getNodePtr(currPrefix);
+      if(nodePtr == nullptr)
+      {
+        return words;
+      }
       char avoidChar = prevPrefix[prevPrefix.length() - 1];
-      neoPredictHelper(tempBST, nodePtr, currPrefix, avoidChar); // needs to implement it, only call it at first......
+      neoPredictHelper(tempBST, nodePtr, currPrefix, avoidChar);
       std::vector<std::string> neoVector;
       if((num_completions - completionDone) <= tempBST.getSize())
       {
@@ -200,6 +251,10 @@ std::vector<std::string> DictionaryTrie::predictCompletions(std::string prefix, 
         completionDone = completionDone + tempBST.getSize();
         prevPrefix = currPrefix;
         currPrefix = "";
+        if(prevPrefix.length() == 1)
+        {
+          return words;
+        }
       }
     }      
   }
@@ -212,7 +267,7 @@ void DictionaryTrie::predictHelper(BST& myBST, Node* currentPtr, std::string wor
 {
   if(currentPtr->isItWord == true)
   {
-    myBST.insert(word, currentPtr->frequency); // need to deal with some error situation......
+    myBST.insert(word, currentPtr->frequency); 
   }  
   
   for(int i=0; i < ARRAY_SIZE; ++i)
@@ -232,6 +287,8 @@ void DictionaryTrie::predictHelper(BST& myBST, Node* currentPtr, std::string wor
     }    
   }
 }
+//This function is the same as predictHelper
+//It skips the index of avoidChar
 void DictionaryTrie::neoPredictHelper(BST& myBST, Node* currentPtr, std::string word, char avoidChar)
 {
   if(currentPtr->isItWord == true)
@@ -272,7 +329,14 @@ treeNode::treeNode()
   rightChild = nullptr;
   parent = nullptr;
 }
-
+/***********************************************************
+The code below is the implementation of BST
+We have decided to use BST because all elements are
+automatically sorted when they are inserted, so it is easy to
+locate nodes which have the highest frequencies.
+Since it is only for helping Trie,
+some unneccessary functions or variables are omitted.
+***********************************************************/
 treeNode::treeNode(std::string myString, unsigned int myFreq)
 {
   treeWord = myString;
@@ -405,16 +469,21 @@ std::vector<std::string> BST::theHighestFreq(std::vector<std::string>&  myVector
   return myVector;
 }
 
+void BST::setTreeNode(treeNode* setPtr)
+{
+  root = setPtr;
+}
+
 BST::~BST()
 {
   deleteAll(root);
 }
-
+//This function is to combine two vectors
 std::vector<std::string> operator+(std::vector<std::string>& theFirst, std::vector<std::string>& theSecond)
 {
   std::vector<std::string> neoVector;
   neoVector = theFirst;
-  for(int i=0; i < theSecond.size(); ++i)
+  for(unsigned int i=0; i < theSecond.size(); ++i)
   {
     neoVector.push_back(theSecond[i]);
   }  

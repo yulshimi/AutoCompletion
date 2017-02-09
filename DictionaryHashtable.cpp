@@ -1,3 +1,7 @@
+//Name: Phillip Jo
+//Date: 02/08/2017/Wed
+//Overview: This is the implementation of DictionaryHashtable.h
+//Assignment#: PA2
 #include "util.h"
 #include "DictionaryHashtable.h"
 

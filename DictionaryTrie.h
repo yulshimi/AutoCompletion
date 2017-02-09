@@ -1,3 +1,7 @@
+//Name: Phillip Jo, San Kang
+//Date: 02/08/2017/Wed
+//Overview: This is the header file of DictionaryTrie.cpp
+//Assignment#: PA2
 /**
  *  CSE 100 PA3 C++ Autocomplete
  *  Authors: Jor-el Briones, Christine Alvarado
@@ -31,7 +35,8 @@ public:
   treeNode* getRoot() const;
   bool insert(std::string myWord, unsigned int myFreq);
   void deleteAll(treeNode* deletePtr);
-  std::vector<std::string> theHighestFreq(std::vector<std::string>& myVector, unsigned int numOfCompletion); 
+  std::vector<std::string> theHighestFreq(std::vector<std::string>& myVector, unsigned int numOfCompletion);
+  void setTreeNode(treeNode* setPtr); 
 private:
   treeNode* root;
   unsigned int size;

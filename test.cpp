@@ -1,8 +1,13 @@
+//Name: Phillip Jo
+//Date: 02/08/2017/Wed
+//Overview: This program is to test all three data structures heavily focused on DictionaryTrie
+//Assignment#: PA2
 #include<iostream>
 #include<string>
 #include<algorithm>
 #include<set>
 #include<cstdlib>
+#include <fstream>
 #include "util.h"
 #include "DictionaryTrie.h"
 #include "DictionaryBST.h"
@@ -46,7 +51,7 @@ int main(int argc, char** argv)
   words.push_back("h arryyy  yyy");
   words.push_back("harry yyyyy");
   words.push_back("h ar ry yyy yy");
-  words.push_back("");
+  words.push_back(" ");
   
   
   cout << "Inserting into Dictionaries..." << endl;
@@ -59,7 +64,7 @@ int main(int argc, char** argv)
       t_bst = d_bst.insert(*wit);
       t_ht = d_ht.insert(*wit);
       tt = dt.insert(*wit, 1);
-      //cout << t_bst << " " << t_ht << " "<< tt << "... ";
+      cout << t_bst << " " << t_ht << " "<< tt << "... ";
       if(!t_bst)
 	{
 	  cout << "failed for DictionaryBST... ";
@@ -110,8 +115,56 @@ int main(int argc, char** argv)
 
   cout << endl;
 
-  
+// This is my own test. Remove it later.  
 /*You are supposed to add more test cases in this file */
-  
+  DictionaryTrie myTrie;
+  myTrie.insert("AB GFG", 100 );  
+  myTrie.insert("abrtrt", 200 );  
+  myTrie.insert("abdewer", 300 );  
+  myTrie.insert("abnmkld", 400 );  
+  myTrie.insert("abvtr", 500 );  
+  myTrie.insert("ab ccf", 501 );  
+  myTrie.insert("abtyui", 502 );  
+  myTrie.insert("abcdeq", 444 );  
+  myTrie.insert("abxzxz", 999 );  
+  myTrie.insert("abyuiop", 111 );  
+  myTrie.insert("aatyty", 202 );  
+  myTrie.insert("AARNE", 44 );  
+  myTrie.insert("aalmkiu", 4 );  
+  myTrie.insert("aaweqvc", 9090 );  
+  myTrie.insert("aaL  ALALALA", 121212 );  
+  myTrie.insert("aalc", 45678 );  
+  myTrie.insert("abcMM  m mm", 442244 );  
+  myTrie.insert("abcttttt",445 );  
+  myTrie.insert("abcvvvvv", 990 );  
+  myTrie.insert("aBcRTRTN", 465 );  
+  myTrie.insert("abciuiuiu", 404 );  
+  myTrie.insert("ABCDEFG", 1 );  
+  myTrie.insert("aalrtrt", 2 );  
+  myTrie.insert("aalvmvmvm", 3 );  
+  myTrie.insert("aalPOPOPO", 42 );
+  vector<string> myVector;
+  myVector = myTrie.predictCompletions("A", 25);
+  for(unsigned int i=0; i < myVector.size(); ++i)
+  {
+    cout << myVector[i] << endl;
+  }
+
+  Utils myUtil;
+  ifstream in_stream;
+  in_stream.open("shuffled_freq_dict.txt");
+  DictionaryTrie* yourTrie = new DictionaryTrie();
+  myUtil.load_dict(*yourTrie, in_stream, 5000);
+  vector<string> goodVector;
+  goodVector = yourTrie->predictCompletions("a", 100);
+  goodVector.clear();
+  goodVector = yourTrie->predictCompletions("k", 444);
+  for(unsigned int i=0; i < goodVector.size(); ++i)
+  {
+    cout << goodVector[i] << endl;
+  }
+  in_stream.close();
+  delete yourTrie;
+
   return 0;
 }
