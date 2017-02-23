@@ -222,6 +222,46 @@ std::string DictionaryTrie::ignore_space(std::string prefix) const
   return new_prefix; 
 }
 
+bool DictionaryTrie::isItValidPrefix(std::string& prefix, unsigned int num_completions, Node*& nodePtr) const
+{
+  if(num_completions == 0)
+  { 
+    return false;
+  }
+  if(prefix.length() == 0)
+  {
+    std::cout << "Invalid Input. Please retry with correct input \n";
+    return false; 
+  }
+  if(prefix[0] == ' ' || prefix[prefix.length()-1] == ' ')
+  { 
+    prefix = ignore_space(prefix);
+  } 
+  for(unsigned int i=0; i < prefix.length(); ++i)
+  { 
+    int ascii_val = (int)prefix[i]; 
+    if((ascii_val < 97 || ascii_val > 122) && ascii_val != 32)
+    { 
+      if(ascii_val <= 90 && ascii_val >= 65)
+      { 
+        prefix[i] = tolower(prefix[i]);
+      }
+      else
+      { 
+        std::cout << "Invalid Input. Please retry with correct input \n";
+        return false;
+      }
+    }
+  }
+  nodePtr = getNodePtr(prefix);
+  if(nodePtr == nullptr)
+  {
+    std::cout << "Invalid Input. Please retry with correct input \n";
+    return false;
+  }
+
+  return true;
+}
 /* Return up to num_completions of the most frequent completions
  * of the prefix, such that the completions are words in the dictionary.
  * These completions should be listed from most frequent to least.
@@ -236,7 +276,13 @@ std::vector<std::string> DictionaryTrie::predictCompletions(std::string prefix, 
 {
   Node* nodePtr;
   std::vector<std::string> words;
-  if(num_completions == 0)
+  if(!isItValidPrefix(prefix, num_completions, nodePtr))
+  {
+    return words;
+  }
+/************************************************************************
+This code is what used to be here and removed for improvement 
+   if(num_completions == 0)
   {
     return words;
   }
@@ -264,13 +310,7 @@ std::vector<std::string> DictionaryTrie::predictCompletions(std::string prefix, 
       }
     }
   }
-  nodePtr = getNodePtr(prefix);
-  if(nodePtr == nullptr) // prefix is invalid
-  {
-    std::cout << "Invalid Input. Please retry with correct input \n";
-    return words;
-  }
-  
+************************************************************************/
   BST tempBST;
   predictHelper(tempBST, nodePtr, prefix);
   if(num_completions <= tempBST.getSize())
