@@ -153,10 +153,10 @@ int main(int argc, char** argv)
   ifstream in_stream;
   in_stream.open("shuffled_freq_dict.txt");
   DictionaryTrie* yourTrie = new DictionaryTrie();
-  myUtil.load_dict(*yourTrie, in_stream, 10000);
+  myUtil.load_dict(*yourTrie, in_stream, 100000);
   cout << "Load Complete!" << endl;
   vector<string> goodVector;
-  goodVector = yourTrie->predictCompletions("    a  ", 999);
+  goodVector = yourTrie->predictCompletions("    the", 100);
   for(unsigned int i=0; i < goodVector.size(); ++i)
   {
     cout << goodVector[i] << endl;

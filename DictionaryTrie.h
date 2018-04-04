@@ -85,7 +85,7 @@ public:
   std::vector<std::string> predictCompletions(std::string prefix, unsigned int num_completions);
   /* Destructor */
   ~DictionaryTrie();
-
+  bool isItValidPrefix(std::string& prefix, unsigned int num_completions, Node*& nodePtr) const;  
 private:
   Node* root;
   void deleteAll(Node* deletePtr);
